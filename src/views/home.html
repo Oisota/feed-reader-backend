@@ -1,0 +1,55 @@
+<!doctype html>
+
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+		<title>Feed Reader</title>
+		<meta name="description" content="Feed Reader">
+		<meta name="author" content="Derek Morey">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+	</head>
+
+	<body>
+		<section class="section">
+			<div class="container">
+
+				<div class="box">
+				{{#items}}
+				<article class="media">
+					<div class="media-content">
+
+						<div class="level mb-1">
+							<div class="level-left">
+								<div class="level-item">
+									<a href="{{link}}" class="title is-5">{{title}}</a>
+								</div>
+							</div>
+							<div class="level-right">
+								<div class="level-item">
+									<span class="is-size-7">{{pubDate}}</span>
+								</div>
+							</div>
+						</div>
+						<div class="level mb-2">
+							<div class="level-left">
+								<div class="level-item">
+									<a href="{{feedLink}}">{{feedTitle}}</a>
+								</div>
+							</div>
+						</div>
+
+						<div class="content">
+							{{{description}}}
+						</div>
+
+					</div>
+				</article>
+				{{/items}}
+				</div>
+
+			</div>
+		</section>
+	</body>
+
+</html>

@@ -1,0 +1,71 @@
+/*
+ * Script to run periodically in order to load data
+ * from feeds and populate the DB with updated feed data
+ */
+
+const axios = require('axios');
+const xml2js = require('xml2js');
+const sqlite3 = require('sqlite3');
+const { open } = require('sqlite');
+
+const feeds = [
+	'https://derekmorey.me/rss.xml',
+	'https://adamdrake.com/index.xml',
+	'https://news.ycombinator.com/rss',
+];
+
+
+(async () => {
+
+	const parser = new xml2js.Parser();
+	const db = await open({
+		filename: './data/app.db',
+		driver: sqlite3.Database,
+	});
+
+	for (const feed of feeds) {
+		const resp = await axios.get(feed);
+		const result = await parser.parseStringPromise(resp.data);
+		for (const item of result.rss.channel[0].item) {
+			// format object here
+			const data = {
+				':pubDate': Math.floor((new Date(item.pubDate[0]).getTime()) / 1000),
+				':link': item.link[0],
+				':title': item.title[0],
+				':description': item.description[0],
+				':feedTitle': result.rss.channel[0].title[0],
+				':feedLink': result.rss.channel[0].link[0],
+			};
+			console.log(data);
+
+			// insert into sqlite DB here
+			const q = `
+			INSERT INTO items(
+				pubDate,
+				link,
+				title,
+				description,
+				feedTitle,
+				feedLink
+			) VALUES (
+				:pubDate,
+				:link,
+				:title,
+				:description,
+				:feedTitle,
+				:feedLink
+			);`;
+
+			let row;
+			try {
+				row = await db.run(q, data);
+			} catch (err) {
+				console.log(err);
+				return;
+			}
+
+			console.log(`Inserted Row, id: ${row}`);
+		}
+	}
+
+})();
