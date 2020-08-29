@@ -5,7 +5,8 @@ create table items (
 	pubDate integer,
 	title text,
 	description text,
-	`link` text,
+	link text,
 	feedTitle text,
-	feedLink text
+	feedLink text,
+	saved integer default 0
 );

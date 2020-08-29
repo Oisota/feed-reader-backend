@@ -11,41 +11,65 @@
 	</head>
 
 	<body>
+
+		<nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+			<div class="navbar-brand">
+				<a class="navbar-item" href="/">Feed Reader</a>
+				<a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+					<span aria-hidden="true"></span>
+					<span aria-hidden="true"></span>
+					<span aria-hidden="true"></span>
+				</a>
+			</div>
+
+			<div id="navbarBasicExample" class="navbar-menu">
+				<div class="navbar-start">
+					<a href="/" class="navbar-item">Feed</a>
+					<a href="/subscriptions" class="navbar-item">Subscriptions</a>
+				</div>
+			</div>
+		</nav>
+
 		<section class="section">
-			<div class="container">
+			<div class="container is-fluid">
 
-				<div class="box">
-				{{#items}}
-				<article class="media">
-					<div class="media-content">
+				<div class="columns">
+					<div class="column is-6 is-offset-3">
+						{{#items}}
+						<div class="box">
+							<article class="media">
+								<div class="media-content">
 
-						<div class="level mb-1">
-							<div class="level-left">
-								<div class="level-item">
-									<a href="{{link}}" class="title is-5">{{title}}</a>
+									<div class="columns mb-1">
+										<div class="column is-9">
+												<a href="{{link}}" class="title is-5 is-block mb-1">{{title}}</a>
+												<a href="{{feedLink}}" class="is-block is-size-7">{{feedTitle}}</a>
+										</div>
+										<div class="column is-3">
+												<span class="is-size-7 is-pulled-right">{{pubDate}}</span>
+										</div>
+									</div>
+
+									<div class="content">
+										{{{description}}}
+									</div>
+
+									<div class="columns">
+										<div class="column is-2 is-offset-10 pb-1 pt-0">
+											{{^saved}}
+											<button class="button is-small is-primary is-outlined is-rounded is-pulled-right">Save</button>
+											{{/saved}}
+											{{#saved}}
+											<button class="button is-small is-primary is-outlined is-rounded is-pulled-right" disabled>Saved</button>
+											{{/saved}}
+										</div>
+									</div>
+
 								</div>
-							</div>
-							<div class="level-right">
-								<div class="level-item">
-									<span class="is-size-7">{{pubDate}}</span>
-								</div>
-							</div>
+							</article>
 						</div>
-						<div class="level mb-2">
-							<div class="level-left">
-								<div class="level-item">
-									<a href="{{feedLink}}">{{feedTitle}}</a>
-								</div>
-							</div>
-						</div>
-
-						<div class="content">
-							{{{description}}}
-						</div>
-
+						{{/items}}
 					</div>
-				</article>
-				{{/items}}
 				</div>
 
 			</div>

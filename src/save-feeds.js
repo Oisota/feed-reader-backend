@@ -36,7 +36,6 @@ const feeds = [
 				':feedTitle': result.rss.channel[0].title[0],
 				':feedLink': result.rss.channel[0].link[0],
 			};
-			console.log(data);
 
 			// insert into sqlite DB here
 			const q = `
@@ -64,7 +63,7 @@ const feeds = [
 				return;
 			}
 
-			console.log(`Inserted Row, id: ${row}`);
+			console.log(`Inserted Row, id: ${row.lastID}`);
 		}
 	}
 

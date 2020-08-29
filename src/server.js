@@ -7,6 +7,7 @@ const helmet = require('helmet');
 const mustacheExpress = require('mustache-express');
 const sqlite3 = require('sqlite3');
 const { open } = require('sqlite');
+const format = require('date-fns/format');
 
 const config = {
 	PORT: 8080,
@@ -32,6 +33,12 @@ app.get('/', async (req, res) => {
 		driver: sqlite3.Database,
 	});
 	const items = await db.all('select * from items order by pubDate desc');
+	const data = items
+		.map(i => {
+			i.pubDate = format(new Date(i.pubDate * 1000), "MMM do, yyyy 'at' h:mm a");
+			i.saved = false;
+			return i;
+		});
 	//TODO format pubDate
 	res.render('home', {
 		items: items
