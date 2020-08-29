@@ -32,16 +32,42 @@ app.get('/', async (req, res) => {
 		filename: './data/app.db',
 		driver: sqlite3.Database,
 	});
-	const items = await db.all('select * from items order by pubDate desc');
+
+	const page = req.query.page ? Number(req.query.page) : 0;
+	const nextPage = page + 1;
+	const pageSize = 25;
+	const offset = page * pageSize
+
+	const getItems = `
+	select *
+	from items
+	order by pubDate desc
+	limit ${pageSize};
+	`;
+	const getItemsOffset = `
+	select *
+	from items
+	order by pubDate desc
+	limit ${pageSize}
+	offset :offset;
+	`;
+	let items;
+	if (page > 0) {
+		items = await db.all(getItemsOffset, offset);
+	} else {
+		items = await db.all(getItems);
+	}
 	const data = items
 		.map(i => {
 			i.pubDate = format(new Date(i.pubDate * 1000), "MMM do, yyyy 'at' h:mm a");
 			i.saved = false;
 			return i;
 		});
-	//TODO format pubDate
+
 	res.render('home', {
-		items: items
+		items: data,
+		prev: (nextPage - 2 > 0) ? `/?page=${nextPage - 2}` : '/',
+		next: `/?page=${nextPage}`,
 	});
 });
 

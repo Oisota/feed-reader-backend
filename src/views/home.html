@@ -30,11 +30,17 @@
 			</div>
 		</nav>
 
-		<section class="section">
+		<section class="section has-background-light pt-4">
 			<div class="container is-fluid">
 
 				<div class="columns">
 					<div class="column is-6 is-offset-3">
+
+						<nav class="pagination is-rounded mb-3" role="navigation" aria-label="pagination">
+							<a href="{{prev}}" class="pagination-previous">Previous</a>
+							<a href="{{next}}" class="pagination-next">Next</a>
+						</nav>
+
 						{{#items}}
 						<div class="box">
 							<article class="media">
@@ -69,6 +75,12 @@
 							</article>
 						</div>
 						{{/items}}
+
+						<nav class="pagination is-rounded" role="navigation" aria-label="pagination">
+							<a href="{{prev}}" class="pagination-previous">Previous</a>
+							<a href="{{next}}" class="pagination-next">Next</a>
+						</nav>
+
 					</div>
 				</div>
 
