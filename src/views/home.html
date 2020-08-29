@@ -41,45 +41,31 @@
 							<a href="{{next}}" class="pagination-next">Next</a>
 						</nav>
 
-						{{#items}}
+						{% for item in items %}
 						<div class="box mb-3">
 							<article class="media">
 								<div class="media-content">
 
 									<div class="columns mb-1">
 										<div class="column is-9">
-												<a href="{{link}}" class="title is-5 is-block mb-1">{{title}}</a>
-												<a href="{{feedLink}}" class="is-block is-size-7">{{feedTitle}}</a>
+												<a href="{{item.link}}" class="title is-5 is-block mb-1">{{item.title}}</a>
+												<a href="{{item.feedLink}}" class="is-block is-size-7">{{item.feedTitle}}</a>
 										</div>
 										<div class="column is-3">
-												<span class="is-size-7 is-pulled-right">{{pubDate}}</span>
+												<span class="is-size-7 is-pulled-right">{{item.pubDate}}</span>
 										</div>
 									</div>
 
 									<div class="content">
-										{{{description}}}
+										{{item.description | safe}}
 									</div>
 
 									<div class="columns">
 										<div class="column is-2 is-offset-10 pb-1 pt-0">
-											{{^saved}}
+											{% if item.saved %}
 											<div class="field is-grouped is-pulled-right">
 												<p class="control">
-													<button class="button is-small is-danger is-outlined is-rounded" hx-delete="/items/{{id}}" hx-trigger="click">
-														Delete
-													</button>
-												</p>
-												<p class="control">
-													<button class="button is-small is-primary is-outlined is-rounded" hx-put="/items/{{id}}/save" hx-trigger="click" hx-swap="outerHTML">
-														Save
-													</button>
-												</p>
-											</div>
-											{{/saved}}
-											{{#saved}}
-											<div class="field is-grouped is-pulled-right">
-												<p class="control">
-													<button class="button is-small is-danger is-outlined is-rounded" hx-delete="/items/{{id}}" hx-trigger="click">
+													<button class="button is-small is-danger is-outlined is-rounded" hx-delete="/items/{{item.id}}" hx-trigger="click">
 														Delete
 													</button>
 												</p>
@@ -89,14 +75,27 @@
 													</button>
 												</p>
 											</div>
-											{{/saved}}
+											{% else %}
+											<div class="field is-grouped is-pulled-right">
+												<p class="control">
+													<button class="button is-small is-danger is-outlined is-rounded" hx-delete="/items/{{item.id}}" hx-trigger="click">
+														Delete
+													</button>
+												</p>
+												<p class="control">
+													<button class="button is-small is-primary is-outlined is-rounded" hx-put="/items/{{item.id}}/save" hx-trigger="click" hx-swap="outerHTML">
+														Save
+													</button>
+												</p>
+											</div>
+											{% endif %}
 										</div>
 									</div>
 
 								</div>
 							</article>
 						</div>
-						{{/items}}
+						{% endfor %}
 
 						<nav class="pagination is-rounded" role="navigation" aria-label="pagination">
 							<a href="{{prev}}" class="pagination-previous">Previous</a>

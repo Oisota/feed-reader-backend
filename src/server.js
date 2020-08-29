@@ -5,20 +5,21 @@ const asyncMiddleware = require('express-async-middleware');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const helmet = require('helmet');
-const mustacheExpress = require('mustache-express');
 const sqlite3 = require('sqlite3');
 const { open } = require('sqlite');
 const format = require('date-fns/format');
+const nunjucks = require('nunjucks');
 
 const config = {
 	PORT: 8080,
 };
 
 const app = express();
-
-app.engine('.html', mustacheExpress());
 app.set('view engine', '.html');
-app.set('views', __dirname + '/views');
+
+nunjucks.configure('src/views', {
+	express: app,
+});
 
 app.disable('x-powered-by');
 app.disable('etag');
