@@ -1,6 +1,7 @@
 const util = require('util');
 
 const express = require('express');
+const asyncMiddleware = require('express-async-middleware');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const helmet = require('helmet');
@@ -25,13 +26,19 @@ app.use(helmet());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
+app.use(express.static('public'));
 
-// main app routes
-app.get('/', async (req, res) => {
+async function getDb() {
 	const db = await open({
 		filename: './data/app.db',
 		driver: sqlite3.Database,
 	});
+	return db;
+}
+
+// main app routes
+app.get('/', asyncMiddleware(async (req, res) => {
+	const db = await getDb();
 
 	const page = req.query.page ? Number(req.query.page) : 0;
 	const nextPage = page + 1;
@@ -69,7 +76,11 @@ app.get('/', async (req, res) => {
 		prev: (nextPage - 2 > 0) ? `/?page=${nextPage - 2}` : '/',
 		next: `/?page=${nextPage}`,
 	});
-});
+}));
+
+app.put('/items/:itemId/save', asyncMiddleware(async (req, res) => {
+	res.status(204).end();
+}));
 
 app.listen(config.PORT, () => {
 	console.log(`Listening on port: ${config.PORT}`);

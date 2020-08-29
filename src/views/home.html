@@ -42,7 +42,7 @@
 						</nav>
 
 						{{#items}}
-						<div class="box">
+						<div class="box mb-3">
 							<article class="media">
 								<div class="media-content">
 
@@ -63,10 +63,32 @@
 									<div class="columns">
 										<div class="column is-2 is-offset-10 pb-1 pt-0">
 											{{^saved}}
-											<button class="button is-small is-primary is-outlined is-rounded is-pulled-right">Save</button>
+											<div class="field is-grouped is-pulled-right">
+												<p class="control">
+													<button class="button is-small is-danger is-outlined is-rounded" hx-delete="/items/{{id}}" hx-trigger="click">
+														Delete
+													</button>
+												</p>
+												<p class="control">
+													<button class="button is-small is-primary is-outlined is-rounded" hx-put="/items/{{id}}/save" hx-trigger="click">
+														Save
+													</button>
+												</p>
+											</div>
 											{{/saved}}
 											{{#saved}}
-											<button class="button is-small is-primary is-outlined is-rounded is-pulled-right" disabled>Saved</button>
+											<div class="field is-grouped is-pulled-right">
+												<p class="control">
+													<button class="button is-small is-danger is-outlined is-rounded" hx-delete="/items/{{id}}" hx-trigger="click">
+														Delete
+													</button>
+												</p>
+												<p class="control">
+													<button class="button is-small is-primary is-outlined is-rounded is-pulled-right" disabled>
+														Saved
+													</button>
+												</p>
+											</div>
 											{{/saved}}
 										</div>
 									</div>
@@ -86,6 +108,7 @@
 
 			</div>
 		</section>
+		<script src="/htmx.min.js"></script>
 	</body>
 
 </html>
