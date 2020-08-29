@@ -67,7 +67,6 @@ app.get('/', asyncMiddleware(async (req, res) => {
 	const data = items
 		.map(i => {
 			i.pubDate = format(new Date(i.pubDate * 1000), "MMM do, yyyy 'at' h:mm a");
-			i.saved = false;
 			return i;
 		});
 
@@ -79,6 +78,21 @@ app.get('/', asyncMiddleware(async (req, res) => {
 }));
 
 app.put('/items/:itemId/save', asyncMiddleware(async (req, res) => {
+	const db = await getDb();
+	const q = `
+	update items
+	set saved = 1
+	where id = :id
+	`;
+	const result = await db.run(q, {':id': req.params.itemId});
+	if (result.changes) {
+		res.render('saved-button', {});
+	} else {
+		res.status(500).send();
+	}
+}));
+
+app.delete('/items/:itemId', asyncMiddleware(async (req, res) => {
 	res.status(204).end();
 }));
 
