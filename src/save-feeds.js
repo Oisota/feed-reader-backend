@@ -8,13 +8,6 @@ const xml2js = require('xml2js');
 const sqlite3 = require('sqlite3');
 const { open } = require('sqlite');
 
-const feeds = [
-	'https://derekmorey.me/rss.xml',
-	'https://adamdrake.com/index.xml',
-	'https://news.ycombinator.com/rss',
-];
-
-
 (async () => {
 
 	const parser = new xml2js.Parser();
@@ -23,8 +16,10 @@ const feeds = [
 		driver: sqlite3.Database,
 	});
 
+	const feeds = await db.all('select * from subscriptions');
+
 	for (const feed of feeds) {
-		const resp = await axios.get(feed);
+		const resp = await axios.get(feed.url);
 		const result = await parser.parseStringPromise(resp.data);
 		for (const item of result.rss.channel[0].item) {
 			// format object here

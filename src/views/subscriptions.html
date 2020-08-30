@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section has-background-light pt-4">
+	<div class="container is-fluid">
+
+		<div class="columns">
+			<div class="column is-6 is-offset-3">
+
+				<div class="columns">
+					<div class="colmun is-1">
+					</div>
+					<div class="colmun is-11">
+					</div>
+				</div>
+
+				<form class="my-2">
+					<div class="field is-horizontal is-full-width">
+						<div class="field-body">
+							<div class="field is-grouped">
+								<p class="control is-expanded">
+									<input class="input is-rounded" type="text" placeholder="Enter Valid Feed URL">
+								</p>
+								<p class="control">
+									<button type="button" class="button is-primary is-rounded is-outlined">Add</button>
+								</p>
+							</div>
+						</div>
+					</div>
+				</form>
+
+				<div class="table-container">
+					<table class="table is-fullwidth is-striped">
+						<thead>
+							<tr>
+								<th>URL</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+						{% for sub in subscriptions %}
+							<tr>
+								<td>{{sub.url}}</td>
+								<td>
+									<button class="button is-danger is-outlined is-rounded is-small">Delete</buttton>
+								</td>
+							</tr>
+						{% endfor %}
+						</tbody>
+					</table>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+</section>
+{% endblock %}

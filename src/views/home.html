@@ -1,113 +1,81 @@
-<!doctype html>
+{% extends "base.html" %}
 
-<html lang="en">
+{% block content %}
+<section class="section has-background-light pt-4">
+	<div class="container is-fluid">
 
-	<head>
-		<meta charset="utf-8">
-		<title>Feed Reader</title>
-		<meta name="description" content="Feed Reader">
-		<meta name="author" content="Derek Morey">
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
-	</head>
+		<div class="columns">
+			<div class="column is-6 is-offset-3">
 
-	<body>
+				<nav class="pagination is-rounded mb-3" role="navigation" aria-label="pagination">
+					<a href="{{prev}}" class="pagination-previous">Previous</a>
+					<a href="{{next}}" class="pagination-next">Next</a>
+				</nav>
 
-		<nav class="navbar is-dark" role="navigation" aria-label="main navigation">
-			<div class="navbar-brand">
-				<a class="navbar-item" href="/">Feed Reader</a>
-				<a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-					<span aria-hidden="true"></span>
-					<span aria-hidden="true"></span>
-					<span aria-hidden="true"></span>
-				</a>
-			</div>
+				{% for item in items %}
+				<div class="box mb-3">
+					<article class="media">
+						<div class="media-content">
 
-			<div id="navbarBasicExample" class="navbar-menu">
-				<div class="navbar-start">
-					<a href="/" class="navbar-item">Feed</a>
-					<a href="/subscriptions" class="navbar-item">Subscriptions</a>
-				</div>
-			</div>
-		</nav>
-
-		<section class="section has-background-light pt-4">
-			<div class="container is-fluid">
-
-				<div class="columns">
-					<div class="column is-6 is-offset-3">
-
-						<nav class="pagination is-rounded mb-3" role="navigation" aria-label="pagination">
-							<a href="{{prev}}" class="pagination-previous">Previous</a>
-							<a href="{{next}}" class="pagination-next">Next</a>
-						</nav>
-
-						{% for item in items %}
-						<div class="box mb-3">
-							<article class="media">
-								<div class="media-content">
-
-									<div class="columns mb-1">
-										<div class="column is-9">
-												<a href="{{item.link}}" class="title is-5 is-block mb-1">{{item.title}}</a>
-												<a href="{{item.feedLink}}" class="is-block is-size-7">{{item.feedTitle}}</a>
-										</div>
-										<div class="column is-3">
-												<span class="is-size-7 is-pulled-right">{{item.pubDate}}</span>
-										</div>
-									</div>
-
-									<div class="content">
-										{{item.description | safe}}
-									</div>
-
-									<div class="columns">
-										<div class="column is-2 is-offset-10 pb-1 pt-0">
-											{% if item.saved %}
-											<div class="field is-grouped is-pulled-right">
-												<p class="control">
-													<button class="button is-small is-danger is-outlined is-rounded" hx-delete="/items/{{item.id}}" hx-trigger="click">
-														Delete
-													</button>
-												</p>
-												<p class="control">
-													<button class="button is-small is-primary is-outlined is-rounded is-pulled-right" disabled>
-														Saved
-													</button>
-												</p>
-											</div>
-											{% else %}
-											<div class="field is-grouped is-pulled-right">
-												<p class="control">
-													<button class="button is-small is-danger is-outlined is-rounded" hx-delete="/items/{{item.id}}" hx-trigger="click">
-														Delete
-													</button>
-												</p>
-												<p class="control">
-													<button class="button is-small is-primary is-outlined is-rounded" hx-put="/items/{{item.id}}/save" hx-trigger="click" hx-swap="outerHTML">
-														Save
-													</button>
-												</p>
-											</div>
-											{% endif %}
-										</div>
-									</div>
-
+							<div class="columns mb-1">
+								<div class="column is-9">
+										<a href="{{item.link}}" class="title is-5 is-block mb-1">{{item.title}}</a>
+										<a href="{{item.feedLink}}" class="is-block is-size-7">{{item.feedTitle}}</a>
 								</div>
-							</article>
+								<div class="column is-3">
+										<span class="is-size-7 is-pulled-right">{{item.pubDate}}</span>
+								</div>
+							</div>
+
+							<div class="content">
+								{{item.description | safe}}
+							</div>
+
+							<div class="columns">
+								<div class="column is-2 is-offset-10 pb-1 pt-0">
+									{% if item.saved %}
+									<div class="field is-grouped is-pulled-right">
+										<p class="control">
+											<button class="button is-small is-danger is-outlined is-rounded" hx-delete="/items/{{item.id}}" hx-trigger="click">
+												Delete
+											</button>
+										</p>
+										<p class="control">
+											<button class="button is-small is-primary is-outlined is-rounded is-pulled-right" disabled>
+												Saved
+											</button>
+										</p>
+									</div>
+									{% else %}
+									<div class="field is-grouped is-pulled-right">
+										<p class="control">
+											<button class="button is-small is-danger is-outlined is-rounded" hx-delete="/items/{{item.id}}" hx-trigger="click">
+												Delete
+											</button>
+										</p>
+										<p class="control">
+											<button class="button is-small is-primary is-outlined is-rounded" hx-put="/items/{{item.id}}/save" hx-trigger="click" hx-swap="outerHTML">
+												Save
+											</button>
+										</p>
+									</div>
+									{% endif %}
+								</div>
+							</div>
+
 						</div>
-						{% endfor %}
-
-						<nav class="pagination is-rounded" role="navigation" aria-label="pagination">
-							<a href="{{prev}}" class="pagination-previous">Previous</a>
-							<a href="{{next}}" class="pagination-next">Next</a>
-						</nav>
-
-					</div>
+					</article>
 				</div>
+				{% endfor %}
+
+				<nav class="pagination is-rounded" role="navigation" aria-label="pagination">
+					<a href="{{prev}}" class="pagination-previous">Previous</a>
+					<a href="{{next}}" class="pagination-next">Next</a>
+				</nav>
 
 			</div>
-		</section>
-		<script src="/htmx.min.js"></script>
-	</body>
+		</div>
 
-</html>
+	</div>
+</section>
+{% endblock %}

@@ -97,6 +97,14 @@ app.delete('/items/:itemId', asyncMiddleware(async (req, res) => {
 	res.status(204).end();
 }));
 
+app.get('/subscriptions', asyncMiddleware(async (req, res) => {
+	const db = await getDb();
+	const subs = await db.all('select * from subscriptions');
+	res.render('subscriptions', {
+		subscriptions: subs,
+	});
+}));
+
 app.listen(config.PORT, () => {
 	console.log(`Listening on port: ${config.PORT}`);
 });
