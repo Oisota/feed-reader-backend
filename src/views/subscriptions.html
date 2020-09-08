@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<section class="section has-background-light pt-4">
+<section class="section has-background-light pt-4" hx-ext="path-deps,hx-clear">
 	<div class="container is-fluid">
 
 		<div class="columns">
@@ -19,35 +19,19 @@
 						<div class="field-body">
 							<div class="field is-grouped">
 								<p class="control is-expanded">
-									<input class="input is-rounded" type="text" placeholder="Enter Valid Feed URL">
+									<input id="feedUrl" class="input is-rounded" type="text" name="feedUrl" placeholder="Enter A Valid Feed URL">
 								</p>
 								<p class="control">
-									<button type="button" class="button is-primary is-rounded is-outlined">Add</button>
+									<button type="button" class="button is-primary is-rounded is-outlined" hx-post="/subscriptions" hx-include="#feedUrl" hx-trigger="click" hx-swap="none" hx-clear="#feedUrl">
+										Add
+									</button>
 								</p>
 							</div>
 						</div>
 					</div>
 				</form>
 
-				<div class="table-container">
-					<table class="table is-fullwidth is-striped">
-						<thead>
-							<tr>
-								<th>URL</th>
-								<th>Action</th>
-							</tr>
-						</thead>
-						<tbody>
-						{% for sub in subscriptions %}
-							<tr>
-								<td>{{sub.url}}</td>
-								<td>
-									<button class="button is-danger is-outlined is-rounded is-small">Delete</buttton>
-								</td>
-							</tr>
-						{% endfor %}
-						</tbody>
-					</table>
+				<div id = #subs-table" class="table-container" hx-get="/subscriptions/table" hx-trigger="path-deps,load" path-deps="/subscriptions">
 				</div>
 
 			</div>
