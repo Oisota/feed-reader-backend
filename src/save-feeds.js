@@ -21,7 +21,15 @@ const { open } = require('sqlite');
 	for (const feed of feeds) {
 		const resp = await axios.get(feed.url);
 		const result = await parser.parseStringPromise(resp.data);
-		for (const item of result.rss.channel[0].item) {
+		let items = [];
+		try {
+			items = result.rss.channel[0].item;
+		} catch (e) {
+			console.log(e);
+			console.log(result);
+			continue;
+		}
+		for (const item of items) {
 			// format object here
 			const data = {
 				':pubDate': Math.floor((new Date(item.pubDate[0]).getTime()) / 1000),
