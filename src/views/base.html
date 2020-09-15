@@ -7,33 +7,23 @@
 		<title>Feed Reader</title>
 		<meta name="description" content="Feed Reader">
 		<meta name="author" content="Derek Morey">
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+		<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
 		{% block styles %}
 		{% endblock %}
 	</head>
 
-	<body>
+	<body class="bg-gray-200">
 
-		<nav class="navbar is-dark" role="navigation" aria-label="main navigation">
-			<div class="navbar-brand">
-				<a class="navbar-item" href="/">Feed Reader</a>
-				<a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-					<span aria-hidden="true"></span>
-					<span aria-hidden="true"></span>
-					<span aria-hidden="true"></span>
-				</a>
-			</div>
-
-			<div id="navbarBasicExample" class="navbar-menu">
-				<div class="navbar-start">
-					<a href="/" class="navbar-item">Feed</a>
-					<a href="/subscriptions" class="navbar-item">Subscriptions</a>
-				</div>
-			</div>
+		<nav class="flex flex-row items-center bg-gray-800 text-gray-200 p-4 text-lg" role="navigation" aria-label="main navigation">
+				<a class="mx-4 text-xl" href="/">Feed Reader</a>
+				<a class="mx-2" href="/">Feed</a>
+				<a class="mx-2" href="/subscriptions">Subscriptions</a>
 		</nav>
 
+		<main class="pt-2">
 		{% block content %}
 		{% endblock %}
+		</main>
 
 		<script src="/htmx.min.js"></script>
 		<script src="/path-deps.js"></script>

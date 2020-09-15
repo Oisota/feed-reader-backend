@@ -1,81 +1,46 @@
 {% extends "base.html" %}
 
 {% block content %}
-<section class="section has-background-light pt-4">
-	<div class="container is-fluid">
+<section class="container mx-auto">
 
-		<div class="columns">
-			<div class="column is-6 is-offset-3">
+	<nav class="flex flex-row justify-between" role="navigation" aria-label="pagination">
+		<a href="{{prev}}" class="mx-1 py-1 px-2 text-blue-500 font-light hover:text-white border-solid border border-blue-500 hover:bg-blue-500 rounded-full">Previous</a>
+		<a href="{{next}}" class="mx-1 py-1 px-2 text-blue-500 font-light hover:text-white border-solid border border-blue-500 hover:bg-blue-500 rounded-full">Next</a>
+	</nav>
 
-				<nav class="pagination is-rounded mb-3" role="navigation" aria-label="pagination">
-					<a href="{{prev}}" class="pagination-previous">Previous</a>
-					<a href="{{next}}" class="pagination-next">Next</a>
-				</nav>
+	{% for item in items %}
+	<article class="bg-white p-2 my-3 shadow rounded">
+		<a href="{{item.link}}" class="text-lg block font-bold">{{item.title}}</a>
+		<a href="{{item.feedLink}}" class="text-sm text-gray-700 block">{{item.feedTitle}}</a>
 
-				{% for item in items %}
-				<div class="box mb-3">
-					<article class="media">
-						<div class="media-content">
-
-							<div class="columns mb-1">
-								<div class="column is-9">
-										<a href="{{item.link}}" class="title is-5 is-block mb-1">{{item.title}}</a>
-										<a href="{{item.feedLink}}" class="is-block is-size-7">{{item.feedTitle}}</a>
-								</div>
-								<div class="column is-3">
-										<span class="is-size-7 is-pulled-right">{{item.pubDate}}</span>
-								</div>
-							</div>
-
-							<div class="content">
-								{{item.description | safe}}
-							</div>
-
-							<div class="columns">
-								<div class="column is-2 is-offset-10 pb-1 pt-0">
-									{% if item.saved %}
-									<div class="field is-grouped is-pulled-right">
-										<p class="control">
-											<button class="button is-small is-danger is-outlined is-rounded" hx-delete="/items/{{item.id}}" hx-trigger="click">
-												Delete
-											</button>
-										</p>
-										<p class="control">
-											<button class="button is-small is-primary is-outlined is-rounded is-pulled-right" disabled>
-												Saved
-											</button>
-										</p>
-									</div>
-									{% else %}
-									<div class="field is-grouped is-pulled-right">
-										<p class="control">
-											<button class="button is-small is-danger is-outlined is-rounded" hx-delete="/items/{{item.id}}" hx-trigger="click">
-												Delete
-											</button>
-										</p>
-										<p class="control">
-											<button class="button is-small is-primary is-outlined is-rounded" hx-put="/items/{{item.id}}/save" hx-trigger="click" hx-swap="outerHTML">
-												Save
-											</button>
-										</p>
-									</div>
-									{% endif %}
-								</div>
-							</div>
-
-						</div>
-					</article>
-				</div>
-				{% endfor %}
-
-				<nav class="pagination is-rounded" role="navigation" aria-label="pagination">
-					<a href="{{prev}}" class="pagination-previous">Previous</a>
-					<a href="{{next}}" class="pagination-next">Next</a>
-				</nav>
-
-			</div>
+		<div class="block mt-2">
+			{{item.description | safe}}
 		</div>
 
-	</div>
+		<div class="flex flex-row justify-end items-center">
+			{% if item.saved %}
+			<button class="mx-1 py-1 px-2 text-sm text-red-500 font-light hover:text-white border-solid border border-red-500 hover:bg-red-500 rounded-full" hx-delete="/items/{{item.id}}" hx-trigger="click">
+				Delete
+			</button>
+			<button class="mx-1 py-1 px-2 text-sm text-green-500 font-light hover:text-white border-solid border border-green-500 hover:bg-green-500 rounded-full" disabled>
+				Saved
+			</button>
+			{% else %}
+			<button class="mx-1 py-1 px-2 text-sm text-red-500 font-light hover:text-white border-solid border border-red-500 hover:bg-red-500 rounded-full" hx-delete="/items/{{item.id}}" hx-trigger="click">
+				Delete
+			</button>
+			<button class="mx-1 py-1 px-2 text-sm text-green-500 font-light hover:text-white border-solid border border-green-500 hover:bg-green-500 rounded-full" hx-put="/items/{{item.id}}/save" hx-trigger="click" hx-swap="outerHTML">
+				Save
+			</button>
+			{% endif %}
+		</div>
+	</article>
+	{% endfor %}
+
+	<nav class="flex flex-row justify-between mb-2" role="navigation" aria-label="pagination">
+		<a href="{{prev}}" class="mx-1 py-1 px-2 text-blue-500 font-light hover:text-white border-solid border border-blue-500 hover:bg-blue-500 rounded-full">Previous</a>
+		<a href="{{next}}" class="mx-1 py-1 px-2 text-blue-500 font-light hover:text-white border-solid border border-blue-500 hover:bg-blue-500 rounded-full">Next</a>
+	</nav>
+
 </section>
 {% endblock %}

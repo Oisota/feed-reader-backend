@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section has-background-light pt-4">
+	<div class="container is-fluid">
+
+		<div class="columns is-centered">
+			<div class="column is-one-quarter">
+				<div class="card">
+					<header class="card-header">
+						<p class="card-header-title">Login</p>
+					</header>
+					<div class="card-content">
+						<form class="is-fullwidth">
+							<div class="field is-fullwidth">
+								<label for="email" class="label">Email</label>
+								<div class="control">
+									<input type="email" class="input">
+								</div>
+							</div>
+							<div class="field">
+								<label for="password" class="label">Password</label>
+								<div class="control">
+									<input type="password" class="input">
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="card-footer">
+						<button type="button" class="button is-primary is-outlined is-fullwidth">Login</button>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+</section>
+{% endblock %}
