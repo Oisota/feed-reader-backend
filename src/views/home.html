@@ -10,8 +10,11 @@
 	</nav>
 
 	{% for item in items %}
-	<article class="bg-white p-2 my-3 shadow rounded">
-		<a href="{{item.link}}" class="text-lg block font-bold">{{item.title}}</a>
+	<article class="bg-white p-2 my-3 shadow rounded-md">
+		<div class="flex flex-row justify-between">
+			<a href="{{item.link}}" class="text-lg block font-bold">{{item.title}}</a>
+			<p class="text-sm text-gray-700 block">{{item.pubDate}}</p>
+		</div>
 		<a href="{{item.feedLink}}" class="text-sm text-gray-700 block">{{item.feedTitle}}</a>
 
 		<div class="block mt-2">
