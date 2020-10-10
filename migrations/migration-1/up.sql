@@ -1,5 +1,12 @@
+drop table if exists user;
 drop table if exists items;
 drop table if exists subscriptions;
+
+create table user (
+	id integer primary key autoincrement,
+	email text unique,
+	hash text 
+);
 
 create table subscriptions (
 	id integer primary key autoincrement,
