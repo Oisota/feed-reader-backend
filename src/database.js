@@ -1,12 +1,8 @@
-const { open } = require('sqlite');
-const sqlite3 = require('sqlite3');
+const { Sequelize } = require('sequelize');
 
-async function getDb() {
-	const db = await open({
-		filename: './data/app.db',
-		driver: sqlite3.Database,
-	});
-	return db;
-}
+const config = require('./config');
 
-module.exports = getDb;
+exports.sequelize = new Sequelize({
+	dialect: 'sqlite',
+	storage: config.DB_FILE,
+});
