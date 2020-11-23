@@ -8,6 +8,8 @@ const xml2js = require('xml2js');
 const sqlite3 = require('sqlite3');
 const { open } = require('sqlite');
 
+const PostModel = require('../models/posts');
+
 (async () => {
 
 	const parser = new xml2js.Parser();

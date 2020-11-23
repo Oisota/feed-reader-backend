@@ -2,11 +2,14 @@ const { Router } = require('express');
 const asyncMiddleware = require('express-async-middleware');
 const format = require('date-fns/format');
 
-const getDb = require('./database');
+const PostModel = require('../models/post');
 
 const router = Router();
 
-router.get('/', asyncMiddleware(async (req, res) => {
+/*
+ * Get all posts
+ */
+router.get('/posts', asyncMiddleware(async (req, res) => {
 	const db = await getDb();
 
 	const page = req.query.page ? Number(req.query.page) : 0;
@@ -46,7 +49,10 @@ router.get('/', asyncMiddleware(async (req, res) => {
 	});
 }));
 
-router.put('/items/:itemId/save', asyncMiddleware(async (req, res) => {
+/*
+ * Save a post by id
+ */
+router.put('/posts/:postId/save', asyncMiddleware(async (req, res) => {
 	const db = await getDb();
 	const q = `
 	update items
@@ -61,7 +67,10 @@ router.put('/items/:itemId/save', asyncMiddleware(async (req, res) => {
 	}
 }));
 
-router.delete('/items/:itemId', asyncMiddleware(async (req, res) => {
+/*
+ * Delete post by id
+ */
+router.delete('/posts/:postId', asyncMiddleware(async (req, res) => {
 	//TODO implement delete
 	res.status(204).end();
 }));
