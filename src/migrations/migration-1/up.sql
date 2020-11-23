@@ -1,6 +1,6 @@
 drop table if exists user;
-drop table if exists items;
-drop table if exists subscriptions;
+drop table if exists post;
+drop table if exists feed;
 
 create table user (
 	id integer primary key autoincrement,
@@ -8,12 +8,12 @@ create table user (
 	hash text 
 );
 
-create table subscriptions (
+create table feed (
 	id integer primary key autoincrement,
 	url text unique
 );
 
-create table items (
+create table post (
 	id integer primary key autoincrement,
 	pubDate integer,
 	title text,
