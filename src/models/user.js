@@ -2,9 +2,9 @@ const { Sequelize } = require('sequelize');
 
 const db = require('../database');
 
-class UserModel extends Sequelize.Model {}
+class User extends Sequelize.Model {}
 
-UserModel.init({
+User.init({
 	email: {
 		type: Sequelize.STRING,
 		allowNull: false,
@@ -15,9 +15,8 @@ UserModel.init({
 	},
 }, {
 	sequelize: db.sequelize,
-	modelName: 'user',
-	tableName: 'user',
 	underscored: true,
+	freezeTableName: true,
 });
 
-module.exports = UserModel;
+module.exports = User;

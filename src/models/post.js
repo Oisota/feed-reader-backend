@@ -1,12 +1,12 @@
 const { Sequelize, DataTypes } = require('sequelize');
 
 const db = require('../database');
-const UserModel = require('./user');
-const FeedModel = require('./feed');
+const User = require('./user');
+const Feed = require('./feed');
 
-class PostModel extends Sequelize.Model {}
+class Post extends Sequelize.Model {}
 
-PostModel.init({
+Post.init({
 	title: {
 		type: Sequelize.STRING,
 	},
@@ -30,16 +30,15 @@ PostModel.init({
 	}
 }, {
 	sequelize: db.sequelize,
-	modelName: 'post',
-	tableName: 'post',
 	underscored: true,
+	freezeTableName: true,
 });
 
 // define relationships
-UserModel.hasMany(PostModel);
-PostModel.belongsTo(UserModel);
+User.hasMany(Post);
+Post.belongsTo(User);
 
-FeedModel.hasMany(PostModel);
-PostModel.belongsTo(FeedModel);
+Feed.hasMany(Post);
+Post.belongsTo(Feed);
 
-module.exports = FeedModel;
+module.exports = Post;

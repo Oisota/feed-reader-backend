@@ -1,11 +1,11 @@
 const { Sequelize } = require('sequelize');
 
 const db = require('../database');
-const UserModel = require('./user');
+const User = require('./user');
 
-class FeedModel extends Sequelize.Model {}
+class Feed extends Sequelize.Model {}
 
-FeedModel.init({
+Feed.init({
 	url: {
 		type: Sequelize.STRING,
 		allowNull: false,
@@ -13,13 +13,12 @@ FeedModel.init({
 	},
 }, {
 	sequelize: db.sequelize,
-	modelName: 'feed',
-	tableName: 'feed',
 	underscored: true,
+	freezeTableName: true
 });
 
 // define relationships
-UserModel.hasMany(FeedModel);
-FeedModel.belongsTo(UserModel);
+User.hasMany(Feed);
+Feed.belongsTo(User);
 
-module.exports = FeedModel;
+module.exports = Feed;
