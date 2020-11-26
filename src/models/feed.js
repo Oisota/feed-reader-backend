@@ -8,6 +8,8 @@ class FeedModel extends Sequelize.Model {}
 FeedModel.init({
 	url: {
 		type: Sequelize.STRING,
+		allowNull: false,
+		unique: true,
 	},
 }, {
 	sequelize: db.sequelize,

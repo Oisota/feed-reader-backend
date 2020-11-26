@@ -30,8 +30,8 @@ PostModel.init({
 	}
 }, {
 	sequelize: db.sequelize,
-	modelName: 'feed',
-	tableName: 'feed',
+	modelName: 'post',
+	tableName: 'post',
 	underscored: true,
 });
 

@@ -7,6 +7,8 @@ class UserModel extends Sequelize.Model {}
 UserModel.init({
 	email: {
 		type: Sequelize.STRING,
+		allowNull: false,
+		unique: true,
 	},
 	hash: {
 		type: Sequelize.STRING,
