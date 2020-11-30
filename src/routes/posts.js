@@ -1,8 +1,7 @@
 const { Router } = require('express');
 const asyncMiddleware = require('express-async-middleware');
-const format = require('date-fns/format');
 
-const PostModel = require('../models/post');
+const PostService = require('../services/post');
 
 const router = Router();
 
@@ -10,40 +9,18 @@ const router = Router();
  * Get all posts
  */
 router.get('/posts', asyncMiddleware(async (req, res) => {
-	const db = await getDb();
 
 	const page = req.query.page ? Number(req.query.page) : 0;
 	const nextPage = page + 1;
-	const pageSize = 25;
-	const offset = page * pageSize
+	const pageSize = 30;
 
-	const getItems = `
-	select *
-	from items
-	order by pubDate desc
-	limit ${pageSize};
-	`;
-	const getItemsOffset = `
-	select *
-	from items
-	order by pubDate desc
-	limit ${pageSize}
-	offset :offset;
-	`;
-	let items;
-	if (page > 0) {
-		items = await db.all(getItemsOffset, offset);
-	} else {
-		items = await db.all(getItems);
-	}
-	const data = items
-		.map(i => {
-			i.pubDate = format(new Date(i.pubDate * 1000), "MMM do, yyyy 'at' h:mm a");
-			return i;
-		});
-
-	res.render('home', {
-		items: data,
+	const items = await PostService.getAll({
+		limit: pageSize,
+		offset: page * pageSize
+	});
+	
+	res.json({
+		data: items,
 		prev: (nextPage - 2 > 0) ? `/?page=${nextPage - 2}` : '/',
 		next: `/?page=${nextPage}`,
 	});
@@ -53,26 +30,30 @@ router.get('/posts', asyncMiddleware(async (req, res) => {
  * Save a post by id
  */
 router.put('/posts/:postId/save', asyncMiddleware(async (req, res) => {
-	const db = await getDb();
-	const q = `
-	update items
-	set saved = 1
-	where id = :id
-	`;
-	const result = await db.run(q, {':id': req.params.itemId});
-	if (result.changes) {
-		res.render('saved-button', {});
+	const result = await PostService.save({
+		id: req.params.postId,
+	});
+	if (result) {
+		res.status(204);
 	} else {
-		res.status(500).send();
+		res.status(500);
 	}
+	res.end();
 }));
 
 /*
  * Delete post by id
  */
 router.delete('/posts/:postId', asyncMiddleware(async (req, res) => {
-	//TODO implement delete
-	res.status(204).end();
+	const result = await PostService.delete({
+		id: req.params.postId,
+	});
+	if (result) {
+		res.status(204);
+	} else {
+		res.status(500);
+	}
+	res.end();
 }));
 
 module.exports = router;

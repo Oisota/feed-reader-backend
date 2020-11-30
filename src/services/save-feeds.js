@@ -1,19 +1,31 @@
 const axios = require('axios');
 const xml2js = require('xml2js');
 
-const FeedModel = require('../models/feed');
-const PostModel = require('../models/posts');
+const { db } = require('../database');
 
 /*
  * Download fresh data from feeds
  */
-exports.downloadFeeds = async () => {
+exports.download = async () => {
 	const parser = new xml2js.Parser();
 
-	const feeds = await FeedModel.findAll();
+	const feeds = await db.select('url').from('feed');
 
 	for (const feed of feeds) {
-		const resp = await axios.get(feed.url);
+		console.log(`Processing Feed: ${feed.url}`);
+
+		// download feed
+		let resp;
+		try {
+			resp = await axios.get(feed.url, {
+				timeout: 5000, // 5 second
+			});
+		} catch (err) {
+			console.log(err);
+			continue;
+		}
+
+		// parse xml
 		const result = await parser.parseStringPromise(resp.data);
 		let items = [];
 		try {
@@ -23,27 +35,31 @@ exports.downloadFeeds = async () => {
 			console.log(result);
 			continue;
 		}
+
+		// insert posts into db
 		for (const item of items) {
 			// format object here
 			const post = {
 				pubDate: Math.floor((new Date(item.pubDate[0]).getTime()) / 1000),
-				url: item.link[0],
 				title: item.title[0],
-				content: item.description[0],
+				description: item.description[0],
+				url: item.link[0],
 				feedTitle: result.rss.channel[0].title[0],
 				feedUrl: result.rss.channel[0].link[0],
+				saved: false,
 			};
 
 			// insert into db
 			let newPost;
 			try {
-				newPost = await PostModel.create(post);
+				newPost = await db('post').insert(post);
 			} catch (err) {
+				console.log(post);
 				console.log(err);
-				return;
+				continue;
 			}
 
-			console.log(`Post Created, Id: ${newPost.id}`);
+			console.log(`Post Created: ${newPost}`);
 		}
 	}
 };

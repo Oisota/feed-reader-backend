@@ -2,7 +2,6 @@ const { Router } = require('express');
 const asyncMiddleware = require('express-async-middleware');
 const argon2 = require('argon2');
 
-const UserModel = require('../models/user');
 
 const router = Router();
 

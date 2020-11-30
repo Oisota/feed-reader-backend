@@ -18,9 +18,9 @@ create table post (
 	pubDate integer,
 	title text,
 	description text,
-	link text,
+	url text,
 	feedTitle text,
-	feedLink text,
+	feedUrl text,
 	saved integer default 0
 );
 

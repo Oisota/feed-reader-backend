@@ -1,8 +1,11 @@
-const { Sequelize } = require('sequelize');
+const knex = require('knex');
 
 const config = require('./config');
 
-exports.sequelize = new Sequelize({
-	dialect: 'sqlite',
-	storage: config.DB_FILE,
+exports.db = knex({
+	client: 'sqlite3',
+	connection: {
+		filename: config.DB_FILE,
+	},
+	useNullAsDefault: true,
 });

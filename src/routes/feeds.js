@@ -1,29 +1,26 @@
 const { Router } = require('express');
 const asyncMiddleware = require('express-async-middleware');
-const format = require('date-fns/format');
 
-const FeedModel = require('../models/feed');
+const FeedService = require('../services/feed');
 
 const router = Router();
 
 /*
  * Get all feeds
  */
-router.get('/subscriptions', asyncMiddleware(async (req, res) => {
-	const db = await getDb();
-	const subs = await db.all('select * from subscriptions');
+router.get('/feeds', asyncMiddleware(async (req, res) => {
+	const feeds = await FeedService.getAll();
 	res.json({
-		data: subs,
+		data: feeds,
 	});
 }));
 
 /*
  * Add new feed
  */
-router.post('/subscriptions', asyncMiddleware(async (req, res) => {
-	const db = await getDb();
-	const result = await db.run('insert into subscriptions (url) values (:url)', {
-		':url': req.body.feedUrl
+router.post('/feeds', asyncMiddleware(async (req, res) => {
+	const result = await FeedService.add({
+		url: req.body.feedUrl,
 	});
 	console.log(result);
 	res.status(201).end();
@@ -32,10 +29,9 @@ router.post('/subscriptions', asyncMiddleware(async (req, res) => {
 /*
  * Delete feed by id
  */
-router.delete('/subscriptions/:subId', asyncMiddleware(async (req, res) => {
-	const db = await getDb();
-	const result = await db.run('delete from subscriptions where id = :id', {
-		':id': req.params.subId
+router.delete('/feeds/:feedId', asyncMiddleware(async (req, res) => {
+	const result = FeedService.delete({
+		id: req.params.feedId
 	});
 	console.log(result);
 	res.status(204).end();
