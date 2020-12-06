@@ -6,7 +6,7 @@ const feeds = require('./feeds');
  * register app routes
  */
 exports.register = (app) => {
-	app.use(auth);
-	app.use(posts);
-	app.use(feeds);
+	app.use('/api/v1', auth);
+	app.use('/api/v1', posts);
+	app.use('/api/v1', feeds);
 };
