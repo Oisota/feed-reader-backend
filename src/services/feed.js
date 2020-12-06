@@ -4,13 +4,16 @@
 
 const { db } = require('../database');
 
-/*
+/**
  * Get all feeds
+ * @returns {Array<Object>} list of feeds
  */
 exports.getAll = async (opts)  => {
 	let result;
 	try {
-		result = await db.select('id', 'url').from('feed');
+		result = await db
+			.select('id', 'url')
+			.from('feed');
 	} catch (err) {
 		console.log(err);
 	}
