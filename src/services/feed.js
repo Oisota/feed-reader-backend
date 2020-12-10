@@ -35,3 +35,20 @@ exports.add = async (opts) => {
 	}
 	return result;
 };
+
+/*
+ * delete feed by id
+ */
+exports.delete = async (opts) => {
+	let result;
+	try {
+		result = await db('feed')
+			.where({
+				id: opts.id
+			})
+			.delete();
+	} catch (err) {
+		console.log(err);
+	}
+	return result;
+};

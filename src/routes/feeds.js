@@ -20,7 +20,7 @@ router.get('/feeds', asyncMiddleware(async (req, res) => {
  */
 router.post('/feeds', asyncMiddleware(async (req, res) => {
 	const result = await FeedService.add({
-		url: req.body.feedUrl,
+		url: req.body.url,
 	});
 	console.log(result);
 	res.status(201).end();
@@ -30,7 +30,7 @@ router.post('/feeds', asyncMiddleware(async (req, res) => {
  * Delete feed by id
  */
 router.delete('/feeds/:feedId', asyncMiddleware(async (req, res) => {
-	const result = FeedService.delete({
+	const result = await FeedService.delete({
 		id: req.params.feedId
 	});
 	console.log(result);
