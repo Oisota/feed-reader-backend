@@ -32,10 +32,11 @@ exports.verify = async(opts) => {
 	const user = await db
 		.select('id', 'hash')
 		.from('user')
-		.where({email: opts.email});
+		.where({email: opts.email})
+		.first();
 
-	const hash = await argon2.hash(opts.password);
-	if (hash === user.hash) {
+	const verified = await argon2.verify(user.hash, opts.password);
+	if (verified) {
 		return user;
 	} else {
 		return null;
