@@ -16,6 +16,9 @@ middlware.register(app)
 // register app routes
 routes.register(app);
 
+// register error handler
+app.use(middlware.errorHandler);
+
 app.listen(config.PORT, () => {
 	console.log(`Listening on port: ${config.PORT}`);
 });

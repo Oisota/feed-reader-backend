@@ -28,7 +28,7 @@ exports.register = async (opts) => {
  * @param {string} opts.password
  * @returns {Promise<object>} user object
  */
-exports.verify = async(opts) => {
+exports.verify = async (opts) => {
 	const user = await db
 		.select('id', 'hash')
 		.from('user')

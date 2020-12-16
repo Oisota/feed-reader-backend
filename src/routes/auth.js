@@ -2,6 +2,7 @@ const { Router } = require('express');
 const asyncMiddleware = require('express-async-middleware');
 
 const AuthService = require('../services/auth');
+const { authRequired } = require('../middleware');
 
 const router = Router();
 
@@ -17,7 +18,6 @@ router.route('/login')
 			console.log(err);
 			throw err;
 		}
-		console.log(user);
 		if (!user) {
 			res.status(400).end();
 			return;
@@ -44,9 +44,11 @@ router.route('/register')
 		res.status(204).end();
 	}));
 
-router.post('/logout', (req, res) => {
-	res.clearCookie('userId');
-	res.status(204).end();
-});
+router.route('/logout')
+	.all(authRequired)
+	.post((req, res) => {
+		res.clearCookie('userId');
+		res.status(204).end();
+	});
 
 module.exports = router;
