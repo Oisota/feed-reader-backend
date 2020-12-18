@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "rss feed reader",
   "main": "src/server.js",
+	"repository": "https://github.com/Oisota/feed-reader-backend",
   "scripts": {
     "start": "export ENV_PATH=./data/env && nodemon src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
