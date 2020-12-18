@@ -10,9 +10,7 @@ const config = require('./config');
  * setup middlware
  */
 exports.register = (app) => {
-	app.use(helmet({
-		contentSecurityPolicy: false, //TODO figure correct settings
-	}));
+	app.use(helmet());
 	app.use(cookieParser(config.COOKIE_SECRET, {
 		secure: config.IN_PROD,
 		httpOnly: config.IN_PROD,
