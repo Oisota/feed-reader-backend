@@ -33,7 +33,7 @@ router.route('/posts')
  */
 router.route('/posts/:postId/save')
 	.all(authRequired)
-	.get(asyncMiddleware(async (req, res) => {
+	.put(asyncMiddleware(async (req, res) => {
 		const result = await PostService.save({
 			id: req.params.postId,
 		});
@@ -50,7 +50,7 @@ router.route('/posts/:postId/save')
  */
 router.route('/posts/:postId')
 	.all(authRequired)
-	.get(asyncMiddleware(async (req, res) => {
+	.delete(asyncMiddleware(async (req, res) => {
 		const result = await PostService.delete({
 			id: req.params.postId,
 		});
