@@ -54,12 +54,35 @@ exports.download = async () => {
 			try {
 				newPost = await db('post').insert(post);
 			} catch (err) {
-				console.log(post);
-				console.log(err);
+				if (err.errno === 19) {
+					console.log('Duplicate post, skipping');
+				} else {
+					console.log(post);
+					console.log(err);
+				}
 				continue;
 			}
 
 			console.log(`Post Created: ${newPost}`);
 		}
 	}
+};
+
+/*
+ * delete old posts that have not been saved
+ */
+exports.deleteOld = async () => {
+	const twoWeeks = 14 * 24 *  60 * 60 * 1000; // 2 weeks in milliseconds
+	const pastDate = (new Date()).getTime() - twoWeeks // need to subtract 2 weeks from date
+	let result;
+	try {
+		result = await db('post')
+			.where('pubDate', '>', pastDate)
+			.andWhere({saved: false})
+			.del();
+	} catch (err) {
+		console.log(err);
+		return;
+	}
+	console.log(result);
 };

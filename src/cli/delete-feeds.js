@@ -9,7 +9,7 @@ const tasks = require('../services/tasks');
 (async () => {
 
 	try {
-		await tasks.download();
+		await tasks.deleteOld();
 	} catch (err) {
 		console.log(err);
 		process.exit(1);
