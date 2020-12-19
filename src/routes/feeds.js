@@ -6,13 +6,15 @@ const { authRequired } = require('../middleware');
 
 const router = Router();
 
-router.route('/feeds')
+router.route('/users/:userId/feeds')
 	.all(authRequired)
 	/*
 	 * Get all feeds
 	 */
 	.get(asyncMiddleware(async (req, res) => {
-		const feeds = await FeedService.getAll();
+		const feeds = await FeedService.getAll({
+			userId: req.params.userId,
+		});
 		res.json({
 			data: feeds,
 		});
@@ -22,6 +24,7 @@ router.route('/feeds')
 	 */
 	.post(asyncMiddleware(async (req, res) => {
 		const result = await FeedService.add({
+			userId: req.params.userId,
 			url: req.body.url,
 		});
 		console.log(result);
@@ -31,11 +34,12 @@ router.route('/feeds')
 /*
  * Delete feed by id
  */
-router.route('/feeds/:feedId')
+router.route('/users/:userId/feeds/:feedId')
 	.all(authRequired)
 	.delete(asyncMiddleware(async (req, res) => {
 		const result = await FeedService.delete({
-			id: req.params.feedId
+			id: req.params.feedId,
+			userId: req.params.userId,
 		});
 		console.log(result);
 		res.status(204).end();

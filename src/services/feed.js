@@ -13,7 +13,8 @@ exports.getAll = async (opts)  => {
 	try {
 		result = await db
 			.select('id', 'url')
-			.from('feed');
+			.from('feed')
+			.where({userId: opts.userId});
 	} catch (err) {
 		console.log(err);
 	}
@@ -26,6 +27,7 @@ exports.getAll = async (opts)  => {
 exports.add = async (opts) => {
 	const feed = {
 		url: opts.url,
+		userId: opts.userId,
 	};
 	let result;
 	try {
@@ -44,7 +46,8 @@ exports.delete = async (opts) => {
 	try {
 		result = await db('feed')
 			.where({
-				id: opts.id
+				id: opts.id,
+				userId: opts.userId,
 			})
 			.delete();
 	} catch (err) {

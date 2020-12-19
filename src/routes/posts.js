@@ -9,7 +9,7 @@ const router = Router();
 /*
  * Get all posts
  */
-router.route('/posts')
+router.route('/users/:userId/posts')
 	.all(authRequired)
 	.get(asyncMiddleware(async (req, res) => {
 		const page = req.query.page ? Number(req.query.page) : 0;
@@ -17,6 +17,7 @@ router.route('/posts')
 		const pageSize = 30;
 
 		const items = await PostService.getAll({
+			userId: req.params.userId,
 			limit: pageSize,
 			offset: page * pageSize
 		});
@@ -31,11 +32,12 @@ router.route('/posts')
 /*
  * Save a post by id
  */
-router.route('/posts/:postId/save')
+router.route('/users/:userId/posts/:postId/save')
 	.all(authRequired)
 	.put(asyncMiddleware(async (req, res) => {
 		const result = await PostService.save({
 			id: req.params.postId,
+			userId: req.params.userId,
 		});
 		if (result) {
 			res.status(204);
@@ -48,11 +50,12 @@ router.route('/posts/:postId/save')
 /*
  * Delete post by id
  */
-router.route('/posts/:postId')
+router.route('/users/:userId/posts/:postId')
 	.all(authRequired)
 	.delete(asyncMiddleware(async (req, res) => {
 		const result = await PostService.delete({
 			id: req.params.postId,
+			userId: req.params.userId,
 		});
 		if (result) {
 			res.status(204);

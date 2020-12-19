@@ -9,7 +9,7 @@ const { db } = require('../database');
 exports.download = async () => {
 	const parser = new xml2js.Parser();
 
-	const feeds = await db.select('url').from('feed');
+	const feeds = await db.select('url', 'userId').from('feed');
 
 	for (const feed of feeds) {
 		console.log(`Processing Feed: ${feed.url}`);
@@ -38,8 +38,9 @@ exports.download = async () => {
 
 		// insert posts into db
 		for (const item of items) {
-			// format object here
+			// format object for db insert
 			const post = {
+				userId: feed.userId,
 				pubDate: Math.floor((new Date(item.pubDate[0]).getTime()) / 1000),
 				title: item.title[0],
 				description: item.description[0],

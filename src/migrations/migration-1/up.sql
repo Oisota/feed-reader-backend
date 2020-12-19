@@ -10,11 +10,15 @@ create table user (
 
 create table feed (
 	id integer primary key autoincrement,
-	url text unique
+	url text,
+	userId integer,
+	foreign key (userId) references user(id),
+	unique (userId, url)
 );
 
 create table post (
 	id integer primary key autoincrement,
+	userId integer,
 	pubDate integer,
 	title text,
 	description text,
@@ -22,6 +26,7 @@ create table post (
 	feedTitle text,
 	feedUrl text,
 	saved integer default 0,
-	unique (url)
+	unique (userId, url),
+	foreign key (userId) references user(id)
 );
 

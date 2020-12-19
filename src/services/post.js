@@ -13,6 +13,7 @@ exports.getAll = async (opts) => {
 		result = await db
 			.select('id', 'title', 'pubDate', 'description', 'url', 'feedTitle', 'feedUrl', 'saved')
 			.from('post')
+			.where({userid: opts.userId})
 			.orderBy('pubDate', 'desc')
 			.limit(opts.limit)
 			.offset(opts.offset);
@@ -33,7 +34,8 @@ exports.save = async (opts) => {
 				saved: true
 			})
 			.where({
-				id: opts.id
+				id: opts.id,
+				userId: opts.userId,
 			});
 	} catch (err) {
 		console.log(err);
@@ -49,7 +51,8 @@ exports.delete = async (opts) => {
 	try {
 		result = await db('post')
 			.where({
-				id: opts.id
+				id: opts.id,
+				userId: opts.userId,
 			})
 			.delete();
 	} catch (err) {
