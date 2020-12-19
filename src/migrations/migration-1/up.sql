@@ -21,6 +21,7 @@ create table post (
 	url text,
 	feedTitle text,
 	feedUrl text,
-	saved integer default 0
+	saved integer default 0,
+	unique (url)
 );
 
