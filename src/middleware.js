@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const asyncMiddleware = require('express-async-middleware');
 
 const config = require('./config');
+const userService = require('./services/user');
 
 /*
  * setup middlware
@@ -25,16 +26,36 @@ exports.register = (app) => {
 /*
  * Auth Required Middleware
  */
-exports.authRequired = (req, res, next) => {
+exports.authRequired = asyncMiddleware(async (req, res, next) => {
 	if (!req.cookies.userId) {
 		const err = new Error('Unauthorized');
 		err.statusCode = 401;
 		throw err;
 	}
-	req.user = {
-		id: req.cookies.userId,
-	};
+	req.user = await userService.get({
+		id: req.cookies.userId
+	});
+	if (!req.user.canLogin) {
+		const err = new Error('Unauthorized');
+		err.statusCode = 401;
+		throw err;
+	}
 	next();
+});
+
+/**
+ * Check if user has a given role
+ * @param {string} role
+ */
+exports.hasRole = (role) => {
+	return (req, res, next) => {
+		if (!req.user.roles.has(role)) {
+			const err = new Error('Unauthorized');
+			err.statusCode = 401;
+			throw err;
+		}
+		next();
+	};
 };
 
 /*

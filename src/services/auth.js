@@ -5,6 +5,7 @@
 const argon2 = require('argon2');
 
 const { db } = require('../database');
+const userService = require('./user');
 
 /**
  * Register a new user
@@ -15,9 +16,25 @@ const { db } = require('../database');
  */
 exports.register = async (opts) => {
 	const hash = await argon2.hash(opts.password);
-	const result = await db('user')
-		.insert({email: opts.email, hash: hash});
-	return result
+
+	const status = await db('accountStatus')
+		.first('id')
+		.where({name: 'registered'});
+
+	console.log(status);
+
+	const role = await db('role')
+		.first('id')
+		.where({name: 'user'});
+
+	console.log(role);
+
+	await db.transaction(async trx => {
+		const user = await trx('user')
+			.insert({email: opts.email, hash: hash, statusId: status.id}, ['id']);
+		await trx('userRole')
+			.insert({userId: user[0], roleId: role.id});
+	});
 };
 
 /**
@@ -37,7 +54,7 @@ exports.verify = async (opts) => {
 
 	const verified = await argon2.verify(user.hash, opts.password);
 	if (verified) {
-		return user;
+		return await userService.get({id: user.id});
 	} else {
 		return null;
 	}

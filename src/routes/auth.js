@@ -19,13 +19,15 @@ router.route('/login')
 			throw err;
 		}
 		if (!user) {
-			res.status(400).end();
-			return;
+			const err = new Error('Bad Request');
+			throw err;
 		}
 		res.cookie('userId', user.id);
 		res.status(200);
 		res.json({
 			id: user.id,
+			status: user.status,
+			roles: Array.from(user.roles),
 		});
 	}));
 
