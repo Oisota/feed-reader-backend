@@ -32,3 +32,35 @@ exports.get = async (opts) => {
 
 	return user;
 };
+
+/**
+ * Get unverified users
+ */
+exports.getUnverified = async (opts) => {
+	const users = await db('user')
+		.join('accountStatus', 'user.statusId', '=', 'accountStatus.id')
+		.select({
+			id: 'user.id',
+			email: 'user.email',
+			status: 'accountStatus.name',
+			canLogin: 'accountStatus.canLogin',
+		})
+		.where({'accountStatus.name': 'registered'});
+
+	return users;
+};
+
+/**
+ * Set account to verified
+ */
+exports.setVerified = async (opts) => {
+	const verified = await db('accountStatus')
+		.first('id')
+		.where({name: 'verified'});
+
+	const result = await db('user')
+		.where({id: opts.id})
+		.update({statusId: verified.id});
+
+	return result;
+};

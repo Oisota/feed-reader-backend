@@ -1,4 +1,5 @@
 const auth = require('./auth');
+const accounts = require('./accounts');
 const posts = require('./posts');
 const feeds = require('./feeds');
 
@@ -7,6 +8,7 @@ const feeds = require('./feeds');
  */
 exports.register = (app) => {
 	app.use('/api/v1/auth', auth);
+	app.use('/api/v1/accounts', accounts);
 	app.use('/api/v1', posts);
 	app.use('/api/v1', feeds);
 };
