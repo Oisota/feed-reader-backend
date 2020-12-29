@@ -15,11 +15,13 @@ router.route('/users/:userId/posts')
 		const page = req.query.page ? Number(req.query.page) : 0;
 		const nextPage = page + 1;
 		const pageSize = 30;
+		const saved = (req.query.saved || '').toLowerCase() === 'true'
 
 		const items = await PostService.getAll({
 			userId: req.params.userId,
 			limit: pageSize,
-			offset: page * pageSize
+			offset: page * pageSize,
+			saved: saved,
 		});
 
 		res.json({

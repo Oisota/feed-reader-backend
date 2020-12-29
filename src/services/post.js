@@ -13,7 +13,18 @@ exports.getAll = async (opts) => {
 		result = await db
 			.select('id', 'title', 'pubDate', 'description', 'url', 'feedTitle', 'feedUrl', 'saved')
 			.from('post')
-			.where({userid: opts.userId})
+			.where(builder => {
+				if (opts.saved) {
+					builder.where({
+						userId: opts.userId,
+						saved: true,
+					});
+				} else {
+					builder.where({
+						userId: opts.userId,
+					});
+				}
+			})
 			.orderBy('pubDate', 'desc')
 			.limit(opts.limit)
 			.offset(opts.offset);
